@@ -122,7 +122,7 @@ namespace FlummyFangen
         public SolidColorBrush BrushColor
         {
             set {
-                Füllung = value;
+                ball.Fill = value;
             }
         }
 
@@ -142,6 +142,14 @@ namespace FlummyFangen
                 dy = value;
             }
             get { return dx; }
+        }
+
+        public string SetTextBall
+        {
+            set
+            {
+                countdownTextBlock.Text = value;
+            }
         }
 
         private void CompositionTarget_Rendering(object sender, EventArgs e)

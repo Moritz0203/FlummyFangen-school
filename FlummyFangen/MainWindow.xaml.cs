@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,12 +31,14 @@ namespace FlummyFangen
         {
             InitializeComponent();
         }
+        
 
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateBals();
-            button1.IsEnabled = false;
+            //CreateBals();
+            GameLoop_1();
+            StartButton.IsEnabled = false;
             SliderBals.IsEnabled = false;
         }
 
@@ -42,14 +46,13 @@ namespace FlummyFangen
         {
             SolidColorBrush Füllung = new SolidColorBrush();
             Füllung.Color = Colors.Gray;
-            if (flummyBall != null)
-            {
-                double speed = SliderVelo.Value; // Geschwindigkeit aus dem Slider-Wert erhalten
+            double speed = SliderVelo.Value; // Geschwindigkeit aus dem Slider-Wert erhalten
+
                 foreach (Flummy flummy in flummies)
                 {
-                    flummy.SetSpeed(speed); // Setze die Geschwindigkeit für die Flummy-Instanz
+                    flummy.SetSpeed = speed; // Setze die Geschwindigkeit für die Flummy-Instanz
                 }
-            }
+
             Spielfeld.Background = Füllung;
         }
 
@@ -60,23 +63,67 @@ namespace FlummyFangen
 
         private async void CreateBals()
         {
-
-            UInt16 Left = 10;
-            UInt16 Top = 20;
-            for (UInt16 i = 0; i <= GameBals; i++)
-            {
-                flummyBall = new Flummy(Spielfeld, Left, Top, RandomBool(), RandomBool());
-                flummies.Add(flummyBall);
-
-                Left += (UInt16)random.Next(20, 120);
-                Top += 15;
-                await Task.Delay(500);
-            }
+            
         }
 
         public bool RandomBool()
         {
             return random.Next(2) == 0;
+        }
+
+        private async void GameLoop_1()
+        {
+            SolidColorBrush Füllung1 = new SolidColorBrush();
+            Füllung1.Color = Colors.Red;
+            SolidColorBrush Füllung2 = new SolidColorBrush();
+            Füllung2.Color = Colors.Green;
+
+            UInt16 Left = 10;
+            UInt16 Top = 20;
+            for (UInt16 i = 0; i <= GameBals; i++)
+            {
+                Flummy flummyInit = new Flummy(Spielfeld, Left, Top, RandomBool(), RandomBool());
+                flummies.Add(flummyInit);
+
+                Left += (UInt16)random.Next(20, 120);
+                Top += 15;
+                await Task.Delay(500);
+
+                Trace.WriteLine(i);
+            }
+
+
+            while (true)
+            {
+                int randomNumber = random.Next(0, flummies.Count);
+                
+                int test = flummies.Count;
+
+                //flummies[1].BrushColor = Füllung1;
+                //flummies[randomNumber].StartTimer();
+
+                //while (flummies[randomNumber].Timer == null)
+                //{
+                //    await Task.Delay(100);
+                //}
+
+                //if(flummies[randomNumber].StateGame == false)
+                //{
+                //    foreach (Flummy flummy in flummies)
+                //    {
+                //        flummy.GridVisibility = Visibility.Collapsed;
+                //    }
+                //    break;
+                //}
+                //else
+                //{
+                //    foreach (Flummy flummy in flummies)
+                //    {
+                //        flummy.BrushColor = Füllung2;
+                //        flummy.SetSpeed += 0.3;
+                //    }
+                //}
+            }
         }
     }
 
